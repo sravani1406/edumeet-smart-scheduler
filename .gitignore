@@ -1,0 +1,51 @@
+# ===============================
+# Node.js
+# ===============================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===============================
+# Python / ML
+# ===============================
+venv/
+__pycache__/
+*.pyc
+
+# ML model artifacts
+*.pkl
+
+# Ignore real datasets
+appointments.csv
+
+# ===============================
+# Environment variables
+# ===============================
+.env
+.env.local
+.env.production
+
+# ===============================
+# Build outputs
+# ===============================
+dist/
+build/
+
+# ===============================
+# Logs
+# ===============================
+logs/
+*.log
+
+# ===============================
+# OS files
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# Editor configs
+# ===============================
+.vscode/
+.idea/
