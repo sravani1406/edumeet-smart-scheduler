@@ -69,6 +69,7 @@ The system replaces informal communication with a **structured, secure, and conf
 
 ## 📂 Project Structure
 
+```
 📁 EDUMEET/
 ├── 📁 backend/
 │   ├── 📁 config/
@@ -93,6 +94,7 @@ The system replaces informal communication with a **structured, secure, and conf
     ├── 📄 postcss.config.js
     ├── 📄 tailwind.config.js
     └── ⚡ vite.config.js
+```
 
 ---
 
