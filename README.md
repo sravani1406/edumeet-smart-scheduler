@@ -104,7 +104,7 @@ EduMeet is a **full-stack MERN web application** that streamlines academic inter
 ---
 
 ### 📅 Teacher — Manage Appointments
-![My Appointments](assets/screenshots/manage-appointments.png)
+![Manage Appointments](assets/screenshots/manage-apponitments.png)
 
 ---
 
