@@ -89,27 +89,27 @@ EduMeet is a **full-stack MERN web application** that streamlines academic inter
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-![Home Page](../assets/screenshots/home.png)
+![Home Page](assets/screenshots/home.png)
 
 ---
 
 ### 🛠️ Admin Dashboard
-![Admin Dashboard](../assets/screenshots/admin-dashboard.png)
+![Admin Dashboard](assets/screenshots/admin-dashboard.png)
 
 ---
 
 ### 👨‍🎓 Student Dashboard
-![Student Dashboard](../assets/screenshots/student-dashboard.png)
+![Student Dashboard](assets/screenshots/student-dashboard.png)
 
 ---
 
-### 📅 Teacher — My Appointments
-![My Appointments](../assets/screenshots/my-appointments.png)
+### 📅 Teacher — Manage Appointments
+![My Appointments](assets/screenshots/manage-appointments.png)
 
 ---
 
 ### 👩‍🏫 Teacher — Set Availability
-![Teacher Availability](..assets/screenshots/teacher-availability.png)
+![Teacher Availability](assets/screenshots/teacher-availability.png)
 
 ---
 
