@@ -69,23 +69,30 @@ The system replaces informal communication with a **structured, secure, and conf
 
 ## 📂 Project Structure
 
-edumeet-smart-scheduler/
-│
-├── frontend/ # React frontend
-│ ├── src/
-│ ├── public/
-│ └── package.json
-│
-├── backend/ # Node.js backend
-│ ├── controllers/
-│ ├── models/
-│ ├── routes/
-│ ├── middleware/
-│ ├── utils/
-│ ├── server.js
-│ └── package.json
-│
-└── README.md
+📁 EDUMEET/
+├── 📁 backend/
+│   ├── 📁 config/
+│   ├── 📁 controllers/
+│   ├── 📁 middleware/
+│   ├── 📁 models/
+│   ├── 📁 node_modules/
+│   ├── 📁 public/
+│   ├── 📁 routes/
+│   ├── 📁 utils/
+│   ├── ⚙️ .env
+│   ├── 📄 .gitignore
+│   ├── 📄 package-lock.json
+│   ├── 📄 package.json
+│   └── 📄 server.js
+└── 📁 frontend/
+    ├── 📁 node_modules/
+    ├── 📁 src/
+    ├── 📄 index.html
+    ├── 📄 package-lock.json
+    ├── 📄 package.json
+    ├── 📄 postcss.config.js
+    ├── 📄 tailwind.config.js
+    └── ⚡ vite.config.js
 
 ---
 
