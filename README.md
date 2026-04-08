@@ -9,6 +9,9 @@ EduMeet is a **full-stack MERN web application** that streamlines academic inter
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 
 ---
+## 🌐 Live Demo
+👉 [Click here to view the app](https://edumeet-smart-scheduler.vercel.app)
+---
 
 ## 📌 Table of Contents
 
