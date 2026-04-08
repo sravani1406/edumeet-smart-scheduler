@@ -28,6 +28,9 @@ app.use((req, res, next) => {
 // ---------------- Serve uploaded avatars ----------------
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
+app.use("/api/recommendations", require("./routes/recommendationRoutes"));
+
+
 
 
 
@@ -38,7 +41,7 @@ const teacherRoutes = require('./routes/teacherRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const profileRoutes = require('./routes/profileRoutes');   // <-- Added
-
+const ratingRoutes = require('./routes/ratingRoutes');
 // Health check route
 app.get('/', (req, res) => {
   res.json({
@@ -64,7 +67,7 @@ app.use('/api/teacher', teacherRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/profile', profileRoutes);   // <-- Added here
-
+app.use('/api/ratings', ratingRoutes);
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({

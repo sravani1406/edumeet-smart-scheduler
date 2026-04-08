@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Landing from './pages/Landing';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import ResetPassword from './pages/ResetPassword'; // ✅ ADDED
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -82,6 +83,11 @@ function AppRoutes() {
             <Register />
           )
         }
+      />
+      {/* 🔐 RESET PASSWORD ROUTE (NEW) */}
+      <Route
+        path="/reset-password/:token"
+        element={<ResetPassword />}
       />
 
       {/* Admin Routes */}

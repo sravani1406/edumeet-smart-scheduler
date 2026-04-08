@@ -1,4 +1,6 @@
+const mongoose = require("mongoose");
 const Appointment = require("../models/Appointment");
+
 
 const Availability = require("../models/Availability");
 
@@ -302,5 +304,61 @@ exports.addMeetingLink = async (req, res) => {
   } catch (error) {
     console.error("Add meeting link error:", error);
     res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.getPersonalizedRecommendations = async (req, res) => {
+  try {
+    const studentId = req.user._id; // logged in student
+
+    const bookings = await Appointment.aggregate([
+      {
+        $match: {
+          student: new mongoose.Types.ObjectId(studentId)
+        }
+      },
+      {
+        $group: {
+          _id: "$teacher",
+          totalBookings: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { totalBookings: -1 }
+      },
+      {
+        $limit: 5   // ✅ MAX 5 TEACHERS
+      }
+    ]);
+
+    if (bookings.length === 0) {
+      return res.json([]);
+    }
+
+    const teacherIds = bookings.map(b => b._id);
+
+    const teachers = await User.find({
+      _id: { $in: teacherIds },
+      role: "teacher"
+    });
+
+    // attach booking count
+    const recommended = teachers.map(teacher => {
+      const bookingData = bookings.find(
+        b => b._id.toString() === teacher._id.toString()
+      );
+
+      return {
+        ...teacher._doc,
+        totalBookings: bookingData.totalBookings
+      };
+    });
+
+    res.json(recommended);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching recommendations" });
   }
 };

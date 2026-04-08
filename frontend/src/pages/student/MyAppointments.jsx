@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, User, BookOpen, MapPin, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
+import { Calendar, Clock, User, BookOpen, MapPin, AlertCircle, CheckCircle, XCircle, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../utils/api';
 
@@ -10,6 +10,12 @@ const MyAppointments = () => {
   const [cancelModal, setCancelModal] = useState(null);
   const [cancelReason, setCancelReason] = useState('');
 
+  // ⭐ Rating States (NEW - nothing removed)
+  const [expandedRating, setExpandedRating] = useState(null);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [reviewText, setReviewText] = useState('');
+  const [submittingRating, setSubmittingRating] = useState(false);
+
   useEffect(() => {
     fetchAppointments();
   }, []);
@@ -17,7 +23,6 @@ const MyAppointments = () => {
   const fetchAppointments = async () => {
     try {
       const response = await api.get('/student/appointments');
-      // Handle both response formats
       const appointmentsData = response.data.appointments || response.data.data || [];
       setAppointments(appointmentsData);
     } catch (error) {
@@ -43,6 +48,36 @@ const MyAppointments = () => {
     } catch (error) {
       console.error('Cancel appointment error:', error);
       toast.error(error.response?.data?.message || 'Failed to cancel appointment');
+    }
+  };
+
+  // ⭐ Submit Rating (NEW)
+  const handleSubmitRating = async (appointmentId) => {
+    if (ratingValue === 0) {
+      toast.error('Please select a rating');
+      return;
+    }
+
+    try {
+      setSubmittingRating(true);
+
+      await api.post('/ratings', {
+        appointmentId,
+        rating: ratingValue,
+        review: reviewText
+      });
+
+      toast.success('Rating submitted successfully');
+
+      setExpandedRating(null);
+      setRatingValue(0);
+      setReviewText('');
+      fetchAppointments();
+
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to submit rating');
+    } finally {
+      setSubmittingRating(false);
     }
   };
 
@@ -97,6 +132,7 @@ const MyAppointments = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">My Appointments</h1>
         <p className="mt-2 text-gray-600">View and manage your scheduled appointments</p>
@@ -104,66 +140,19 @@ const MyAppointments = () => {
 
       {/* Filter Tabs */}
       <div className="mb-6 flex flex-wrap gap-2">
-        <button
-          onClick={() => setFilter('all')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === 'all'
-              ? 'bg-primary-600 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-          }`}
-        >
-          All
-        </button>
-        <button
-          onClick={() => setFilter('upcoming')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === 'upcoming'
-              ? 'bg-primary-600 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-          }`}
-        >
-          Upcoming
-        </button>
-        <button
-          onClick={() => setFilter('pending')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === 'pending'
-              ? 'bg-primary-600 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-          }`}
-        >
-          Pending
-        </button>
-        <button
-          onClick={() => setFilter('confirmed')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === 'confirmed'
-              ? 'bg-primary-600 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-          }`}
-        >
-          Confirmed
-        </button>
-        <button
-          onClick={() => setFilter('completed')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === 'completed'
-              ? 'bg-primary-600 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-          }`}
-        >
-          Completed
-        </button>
-        <button
-          onClick={() => setFilter('cancelled')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === 'cancelled'
-              ? 'bg-primary-600 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-          }`}
-        >
-          Cancelled
-        </button>
+        {['all','upcoming','pending','confirmed','completed','cancelled'].map(type => (
+          <button
+            key={type}
+            onClick={() => setFilter(type)}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              filter === type
+                ? 'bg-primary-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+            }`}
+          >
+            {type.charAt(0).toUpperCase() + type.slice(1)}
+          </button>
+        ))}
       </div>
 
       {/* Appointments List */}
@@ -172,7 +161,7 @@ const MyAppointments = () => {
           <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No appointments found</h3>
           <p className="text-gray-600">
-            {filter === 'all' 
+            {filter === 'all'
               ? 'You have not booked any appointments yet.'
               : `No ${filter} appointments found.`}
           </p>
@@ -186,6 +175,8 @@ const MyAppointments = () => {
             >
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                 <div className="flex-1">
+
+                  {/* Teacher Info */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className="bg-primary-100 p-3 rounded-full">
@@ -206,15 +197,18 @@ const MyAppointments = () => {
                     </span>
                   </div>
 
+                  {/* Appointment Details */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="flex items-center gap-2 text-gray-700">
                       <Calendar className="w-5 h-5 text-gray-400" />
-                      <span>{new Date(appointment.date).toLocaleDateString('en-US', { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}</span>
+                      <span>
+                        {new Date(appointment.date).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-gray-700">
                       <Clock className="w-5 h-5 text-gray-400" />
@@ -272,9 +266,67 @@ const MyAppointments = () => {
                       </p>
                     </div>
                   )}
+
+                  {/* ⭐ Rating Section (ONLY ADDITION) */}
+                  {appointment.status === 'completed' && (
+                    <div className="mt-4 border-t pt-4">
+                      {expandedRating === appointment._id ? (
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <div className="flex gap-2 mb-3">
+                            {[1,2,3,4,5].map(star => (
+                              <Star
+                                key={star}
+                                onClick={() => setRatingValue(star)}
+                                className={`w-6 h-6 cursor-pointer ${
+                                  ratingValue >= star
+                                    ? 'text-yellow-400 fill-yellow-400'
+                                    : 'text-gray-300'
+                                }`}
+                              />
+                            ))}
+                          </div>
+
+                          <textarea
+                            value={reviewText}
+                            onChange={(e) => setReviewText(e.target.value)}
+                            placeholder="Write a review (optional)..."
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg mb-3"
+                            rows="3"
+                          />
+
+                          <div className="flex gap-3">
+                            <button
+                              onClick={() => handleSubmitRating(appointment._id)}
+                              disabled={submittingRating}
+                              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+                            >
+                              Submit Rating
+                            </button>
+                            <button
+                              onClick={() => {
+                                setExpandedRating(null);
+                                setRatingValue(0);
+                                setReviewText('');
+                              }}
+                              className="px-4 py-2 border border-gray-300 rounded-lg"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setExpandedRating(appointment._id)}
+                          className="text-primary-600 hover:text-primary-700 font-medium"
+                        >
+                          ⭐ Rate Teacher
+                        </button>
+                      )}
+                    </div>
+                  )}
+
                 </div>
 
-                {/* Action Buttons */}
                 {appointment.status === 'pending' || appointment.status === 'confirmed' ? (
                   <div className="mt-4 lg:mt-0 lg:ml-6">
                     <button
@@ -328,6 +380,7 @@ const MyAppointments = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

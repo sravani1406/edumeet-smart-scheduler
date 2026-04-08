@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto'); // ✅ ADDED
+const { sendPasswordResetEmail } = require('../utils/email');
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -91,6 +93,91 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// ==============================
+// 🔐 FORGOT PASSWORD (NEW)
+// ==============================
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'No user found with this email' });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    // Hash token before saving
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
+
+    await user.save();
+
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+    const message = `
+      <h2>Password Reset Request</h2>
+      <p>You requested to reset your password.</p>
+      <p>Click the link below:</p>
+      <a href="${resetUrl}" target="_blank">${resetUrl}</a>
+      <p>This link will expire in 15 minutes.</p>
+    `;
+
+    await sendPasswordResetEmail(user.email, user.name, resetUrl);
+
+    res.status(200).json({
+      message: 'Password reset link sent to your email',
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// ==============================
+// 🔐 RESET PASSWORD (NEW)
+// ==============================
+exports.resetPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpire: { $gt: Date.now() }
+    })
+
+    if (!user) {
+      return res.status(400).json({
+        message: 'Invalid or expired reset token'
+      });
+    }
+
+    // Update password (pre-save hook will hash automatically)
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.json({
+      message: 'Password reset successful',
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 // ==============================
 // GET CURRENT USER
@@ -160,8 +247,7 @@ exports.changePassword = async (req, res) => {
       return res.status(401).json({ message: 'Current password is incorrect' });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    user.password = newPassword;//pre-save hook hashes it
     await user.save();
 
     res.json({ message: 'Password updated successfully' });

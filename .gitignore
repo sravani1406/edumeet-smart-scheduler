@@ -7,19 +7,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # ===============================
-# Python / ML
-# ===============================
-venv/
-__pycache__/
-*.pyc
-
-# ML model artifacts
-*.pkl
-
-# Ignore real datasets
-appointments.csv
-
-# ===============================
 # Environment variables
 # ===============================
 .env

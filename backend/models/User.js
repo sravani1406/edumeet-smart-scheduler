@@ -52,6 +52,22 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: ''
     },
+    averageRating: {
+      type: Number,
+      default: 0
+    },
+    totalRatings: {
+      type: Number,
+      default: 0
+    },
+
+    ratingBreakdown: {
+      five: { type: Number, default: 0 },
+      four: { type: Number, default: 0 },
+      three: { type: Number, default: 0 },
+      two: { type: Number, default: 0 },
+      one: { type: Number, default: 0 }
+    },
 
     subject: {
       type: String,
@@ -82,6 +98,19 @@ const userSchema = new mongoose.Schema(
       Friday: [availabilitySchema],
       Saturday: [availabilitySchema],
       Sunday: [availabilitySchema]
+    },
+    /* ======================================================
+       🔐 ADDED FOR FORGOT PASSWORD (SAFE ADDITION)
+       ====================================================== */
+
+    resetPasswordToken: {
+      type: String,
+      default: undefined
+    },
+
+    resetPasswordExpire: {
+      type: Date,
+      default: undefined
     }
   },
   {

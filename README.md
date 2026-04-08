@@ -1,175 +1,157 @@
-# 🎓 EduMeet – Smart Teacher Appointment & Recommendation System
+# 🎓 EduMeet - Smart Appointment Scheduler
 
-EduMeet is a **full-stack MERN application** integrated with a **Machine Learning microservice** that enables students to book appointments with teachers and receive **intelligent teacher recommendations** based on subject preferences and past booking history.
+EduMeet is a **full-stack MERN web application** designed to streamline academic interactions by enabling students to book appointments with teachers based on real-time availability.
 
-The system uses a **hybrid recommendation approach**:
-- 🤖 **ML-based recommendations** (when historical data exists)
-- 📏 **Rule-based recommendations** (fallback when ML data is unavailable)
+The system replaces informal communication with a **structured, secure, and conflict-free scheduling platform**, improving efficiency and transparency within educational institutions.
 
 ---
 
 ## 🚀 Key Features
 
 ### 👨‍🎓 Student Features
-- Secure authentication & authorization (JWT)
+- Secure authentication & role-based access (JWT)
 - Browse approved teachers
-- Book, cancel, and view appointments
-- Subject-based teacher recommendations
-- Hybrid recommendation display (ML / Rule-based)
-- Email notifications for bookings
+- Book appointments based on availability
+- Conflict-free booking (no duplicate slots)
+- Receive automated email notifications
+- Submit ratings & feedback within a **48-hour window**
+- Get **personalized teacher recommendations** based on booking history
+
+---
 
 ### 👩‍🏫 Teacher Features
-- Profile management
-- Availability management
-- Appointment handling
-
-### 🤖 Recommendation System
-- ML-based recommendation using **KNN**
-- Rule-based fallback using MongoDB subject matching
-- Automatic switch between ML and rule-based logic
-- Seamless backend ↔ ML microservice communication
+- Secure login and dashboard access
+- Define and manage availability slots
+- Accept or reject appointment requests
+- View scheduled appointments
 
 ---
 
-### 🧠 Hybrid Recommendation Logic (Important)
-
-The recommendation system works as follows:
-
-IF subject exists in previous appointment history
-    → Use ML-based recommendation
-ELSE
-    → Use rule-based recommendation (MongoDB subject match)
+### 🛠️ Admin Features
+- Approve or reject user registrations
+- Manage students and teachers
+- Monitor appointments centrally
 
 ---
 
-## 🔍 Why Hybrid?
-- ML requires historical data
-- New subjects or new systems may lack data
-- Rule-based logic ensures no empty results
-- Improves reliability and user experience
+## 🧠 Core Functionalities
+
+- **Role-Based Access Control (RBAC)** for Admin, Teacher, and Student  
+- **Availability-Based Scheduling** to ensure structured booking  
+- **Conflict-Free Appointment System** using backend validation  
+- **Automated Email Notifications** for booking and status updates  
+- **48-Hour Rating System** enforced at backend  
+- **Personalized Recommendation System** using booking history and recency logic  
 
 ---
 
 ## 🛠️ Tech Stack
-Frontend
+
+### Frontend
 - React.js
 - Tailwind CSS
 - Axios
 - React Router
 
-Backend
+### Backend
 - Node.js
 - Express.js
 - MongoDB
 - Mongoose
 - JWT Authentication
+- bcrypt.js
 
-Machine Learning Service
-- Python
-- Flask
-- scikit-learn
-- KNN (Nearest Neighbors)
-- Pandas & NumPy
-
-Other Tools
+### Other Tools
 - Nodemailer (Email Notifications)
 - Git & GitHub
 
 ---
 
 ## 📂 Project Structure
-edumeet/
+
+edumeet-smart-scheduler/
 │
-├── frontend/                 # React frontend
-│   ├── src/
-│   ├── public/
-│   └── package.json
+├── frontend/ # React frontend
+│ ├── src/
+│ ├── public/
+│ └── package.json
 │
-├── backend/                  # Node.js backend
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middleware/
-│   ├── utils/
-│   ├── server.js
-│   └── package.json
-│
-├── ml-service/               # ML microservice (Flask)
-│   ├── app.py
-│   ├── train.py
-│   ├── export_data.py
-│   ├── appointments.csv
-│   ├── model.pkl
-│   ├── student_encoder.pkl
-│   ├── subject_encoder.pkl
-│   └── requirements.txt
+├── backend/ # Node.js backend
+│ ├── controllers/
+│ ├── models/
+│ ├── routes/
+│ ├── middleware/
+│ ├── utils/
+│ ├── server.js
+│ └── package.json
 │
 └── README.md
-
-“Copy appointments.sample.csv → appointments.csv before training”
 
 ---
 
 ## ⚙️ Environment Variables
--Create a .env file inside backend/
 
+Create a `.env` file inside `backend/`: 
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+EMAIL_USER=your_email
+EMAIL_PASS=your_app_password
 FRONTEND_URL=http://localhost:5173
-ML_SERVICE_URL=http://127.0.0.1:5001
-⚠️ Never commit .env files to GitHub.
+
+
+⚠️ Never commit `.env` files to GitHub.
+
+---
 
 ## ▶️ How to Run Locally
 
-1️⃣ Clone Repository
-- git clone https://github.com/your-username/edumeet.git
-- cd edumeet
+### 1️⃣ Clone Repository
 
-2️⃣ Backend Setup
-- cd backend
-- npm install
-- npm run dev
+git clone https://github.com/your-username/edumeet-smart-scheduler.git
 
-3️⃣ ML Service Setup
-- cd ml-service
-- python -m venv venv
-- venv\Scripts\activate   # Windows
-- pip install -r requirements.txt
-- python train.py
-- python app.py
+cd edumeet-smart-scheduler
 
-4️⃣ Frontend Setup
-- cd frontend
-- npm install
-- npm run dev
 
-## 📊 ML Model Details
+### 2️⃣ Backend Setup
 
-Algorithm: K-Nearest Neighbors (KNN)
+cd backend
+npm install
+npm run dev
 
-Features:
-- Encoded Student ID
-- Encoded Subject
-- Training data: Derived from MongoDB appointments
-- Output: Recommended Teacher IDs
 
-## 🔐 Security Considerations
+### 3️⃣ Frontend Setup
+
+cd frontend
+npm install
+npm run dev
+
+
+---
+
+## 🔐 Security Features
 - JWT-based authentication
-- Role-based access control
+- Role-based authorization (RBAC)
 - Password hashing using bcrypt
-- Sensitive files ignored via .gitignore
+- Protected API routes
+- Backend validation for critical operations
 
-## 📌 Future Enhancements (Optional)
-- Store teacher subjects as arrays
-- Collaborative filtering
-- Recommendation confidence score
-- Docker deployment
-- Cloud ML service hosting
+---
+
+## 📌 Future Enhancements
+- Real-time notifications using WebSockets
+- Admin analytics dashboard (top-rated teachers, trends)
+- Calendar integration (Google Calendar)
+- Mobile application support
+- Advanced recommendation system
+
+---
 
 ## 👩‍💻 Author
 
-- Developed by P.Lakshmi Sravani
-B.Tech CSE | Full-Stack Developer | ML Enthusiast
+**P. Lakshmi Sravani**  
+B.Tech CSE | Full-Stack Developer  
 
-⭐ If you like this project, give it a star!
+---
+
+⭐ If you like this project, consider giving it a star!

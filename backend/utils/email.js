@@ -23,7 +23,49 @@ const createTransporter = () => {
 
   return transporter;
 };
+// --------------------------------------------------
+// 🔐 SEND PASSWORD RESET EMAIL (NEW)
+// --------------------------------------------------
+exports.sendPasswordResetEmail = async (email, name, resetUrl) => {
+  const transporter = createTransporter();
 
+  const mailOptions = {
+    from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
+    to: email,
+    subject: 'Reset Your Password - EduMeet',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px;">
+        <h2 style="color:#4F46E5;">Password Reset Request</h2>
+        <p>Hi ${name},</p>
+        <p>You requested to reset your password.</p>
+        <p>Click the button below to set a new password:</p>
+
+        <a href="${resetUrl}"
+           style="display:inline-block;padding:10px 20px;
+           background:#4F46E5;color:white;text-decoration:none;
+           border-radius:5px;margin-top:10px;">
+           Reset Password
+        </a>
+
+        <p style="margin-top:20px;">
+          This link will expire in <b>15 minutes</b>.
+        </p>
+
+        <p>If you did not request this, please ignore this email.</p>
+
+        <p>— EduMeet Team</p>
+      </div>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('📧 Password reset email sent successfully to:', email);
+  } catch (error) {
+    console.error('❌ Password reset email error:', error.message);
+    throw error;
+  }
+};
 // --------------------------------------------------
 // SEND APPROVAL EMAIL
 // --------------------------------------------------

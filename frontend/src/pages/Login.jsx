@@ -14,6 +14,11 @@ const Login = () => {
     password: ''
   });
 
+  // ✅ NEW STATES (Forgot Password)
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotLoading, setForgotLoading] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -71,7 +76,7 @@ const Login = () => {
     } else if (user.role === 'teacher') {
       window.location.replace('/teacher/dashboard');
     } else {
-      window.location.replace('/student/dashboard');
+      window.location.replace('/student/Home');
     }
 
   } catch (error) {
@@ -88,7 +93,37 @@ const Login = () => {
     setLoading(false);
   }
 };
+// ==============================
+  // 🔐 FORGOT PASSWORD
+  // ==============================
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
 
+    if (!forgotEmail) {
+      toast.error("Please enter your email");
+      return;
+    }
+
+    setForgotLoading(true);
+
+    try {
+      const res = await api.post('/auth/forgot-password', {
+        email: forgotEmail
+      });
+
+      toast.success(res.data.message || "Reset link sent");
+      setShowForgotModal(false);
+      setForgotEmail('');
+
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+        "Something went wrong"
+      );
+    } finally {
+      setForgotLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
@@ -148,6 +183,16 @@ const Login = () => {
                 />
               </div>
             </div>
+            {/* 🔹 Forgot Password Link */}
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={() => setShowForgotModal(true)}
+                className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+              >
+                Forgot Password?
+              </button>
+            </div>
             {errorMsg && (
   <p className="text-red-600 text-sm font-medium">
     {errorMsg}
@@ -175,6 +220,45 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {/* ==============================
+           🔐 FORGOT PASSWORD MODAL
+         ============================== */}
+      {showForgotModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Reset Password</h3>
+
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <input
+                type="email"
+                placeholder="Enter your registered email"
+                value={forgotEmail}
+                onChange={(e) => setForgotEmail(e.target.value)}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+              />
+
+              <div className="flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotModal(false)}
+                  className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={forgotLoading}
+                  className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:bg-gray-400"
+                >
+                  {forgotLoading ? "Sending..." : "Send Link"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

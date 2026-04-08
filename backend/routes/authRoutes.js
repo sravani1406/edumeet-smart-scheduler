@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const { generateToken, protect } = require('../middleware/auth');
-const { updateProfile } = require('../controllers/authController');
+const { 
+  updateProfile,
+  forgotPassword,     // ✅ ADDED
+  resetPassword       // ✅ ADDED
+} = require('../controllers/authController');
 
 // ------------------------------------------------------
 // CHECK IF ADMIN EXISTS  ✅ REQUIRED FOR FRONTEND
@@ -135,6 +139,18 @@ router.post('/login', async (req, res) => {
     });
   }
 });
+// ------------------------------------------------------
+// 🔐 FORGOT PASSWORD (NEW)
+// POST /api/auth/forgot-password
+// ------------------------------------------------------
+router.post('/forgot-password', forgotPassword);
+
+
+// ------------------------------------------------------
+// 🔐 RESET PASSWORD (NEW)
+// PUT /api/auth/reset-password/:token
+// ------------------------------------------------------
+router.put('/reset-password/:token', resetPassword);
 
 // ------------------------------------------------------
 // GET USER PROFILE

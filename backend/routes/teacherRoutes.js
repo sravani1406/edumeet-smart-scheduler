@@ -10,10 +10,9 @@ const {
   setAvailability,
   getTeacherAppointments,
   updateAppointmentStatus,
-  addMeetingLink           // 👈 ADD THIS
+  addMeetingLink,
+  getPersonalizedRecommendations
 } = require("../controllers/teacherController");
-
-
 
 // --------------------- PROFILE ROUTES ---------------------
 router.get(
@@ -52,7 +51,7 @@ router.post(
   setAvailability
 );
 
-// --------------------- APPOINTMENTS ROUTE (FIXED) ---------------------
+// --------------------- APPOINTMENTS ROUTE ---------------------
 router.get(
   "/appointments",
   protect,
@@ -60,6 +59,13 @@ router.get(
   getTeacherAppointments
 );
 
+// --------------------- RECOMMENDED TEACHERS ---------------------
+router.get(
+  "/recommended",
+  protect,
+  authorize("student"),
+  getPersonalizedRecommendations
+);
 
 // --------------------- UPDATE APPOINTMENT STATUS ---------------------
 router.put(
@@ -68,7 +74,6 @@ router.put(
   authorize("teacher"),
   updateAppointmentStatus
 );
-
 
 router.put(
   "/appointments/:id/meeting-link",
