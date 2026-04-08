@@ -147,11 +147,14 @@ npm run dev
 
 ---
 
-## 👩‍💻 Author
+## 👩‍💻 Team Members
 
-**P. Lakshmi Sravani**  
-B.Tech CSE | Full-Stack Developer  
+This project was developed as part of a team collaboration:
 
+- **P. Lakshmi Sravani** – Full Stack Development (Backend Logic, Database Management)
+- **Divya Reddy** – Full Stack Development (API Development, Backend, Validation)
+- **P. Ruthu Kumari** – Full Stack Development (Frontend Components, UI Design, API Integration)
+- **S. Parveen Bhanu** – Full Stack Development (Testing, Debugging, Documentation, UI Enhancements)
 ---
 
 ⭐ If you like this project, consider giving it a star!
