@@ -86,6 +86,32 @@ EduMeet is a **full-stack MERN web application** that streamlines academic inter
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)
 
 ---
+## 📸 Screenshots
+
+### 🏠 Home Page
+![Home Page](assets/screenshots/home.png)
+
+---
+
+### 🛠️ Admin Dashboard
+![Admin Dashboard](assets/screenshots/admin-dashboard.png)
+
+---
+
+### 👨‍🎓 Student Dashboard
+![Student Dashboard](assets/screenshots/student-dashboard.png)
+
+---
+
+### 📅 My Appointments
+![My Appointments](assets/screenshots/my-appointments.png)
+
+---
+
+### 👩‍🏫 Teacher — Set Availability
+![Teacher Availability](assets/screenshots/teacher-availability.png)
+
+---
 
 ## 📂 Project Structure
 
