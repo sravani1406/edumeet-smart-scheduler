@@ -11,6 +11,7 @@ EduMeet is a **full-stack MERN web application** that streamlines academic inter
 ---
 ## 🌐 Live Demo
 👉 [Click here to view the app](https://edumeet-smart-scheduler.vercel.app)
+> ⚠️ Note: Initial load may take a few seconds due to server cold start.
 ---
 
 ## 📌 Table of Contents
@@ -23,7 +24,6 @@ EduMeet is a **full-stack MERN web application** that streamlines academic inter
 - [How to Run Locally](#️-how-to-run-locally)
 - [Security Features](#-security-features)
 - [Future Enhancements](#-future-enhancements)
-- [Team Members](#-team-members)
 
 ---
 
@@ -214,16 +214,10 @@ npm run dev
 
 ---
 
-## 👩‍💻 Team Members
+## 👩‍💻 Author
 
-This project was developed as a team collaboration:
-
-| Name | Role |
-|------|------|
-| **P. Lakshmi Sravani** | Full Stack — Backend Logic & Database Management |
-| **Divya Reddy** | Full Stack — API Development, Backend & Validation |
-| **P. Ruthu Kumari** | Full Stack — Frontend Components, UI Design & API Integration |
-| **S. Parveen Bhanu** | Full Stack — Testing, Debugging, Documentation & UI Enhancements |
+**P. Lakshmi Sravani**  
+B.Tech CSE | Full-Stack Developer  
 
 ---
 
@@ -231,6 +225,6 @@ This project was developed as a team collaboration:
 
 ⭐ **If you found this project helpful, please give it a star!** ⭐
 
-Made with ❤️ by Team EduMeet
+Made with ❤️ by P. Lakshmi Sravani | Full Stack Developer
 
 </div>
